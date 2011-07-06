@@ -240,26 +240,20 @@ Array.forEach(['get', 'post', 'put', 'delete', 'GET', 'POST', 'PUT', 'DELETE'], 
 
 Request.implement(methods);
 
-Node.Element.Properties.send = {
-
-	set: function(options){
-		var send = this.get('send').cancel();
-		send.setOptions(options);
-		return this;
-	},
-
-	get: function(){
-		var send = this.retrieve('send');
-		if (!send){
-			send = new Request({
-				data: this, link: 'cancel', method: this.get('method') || 'post', url: this.get('action')
-			});
-			this.store('send', send);
-		}
-		return send;
+Node.Element.defineSetter('send', function(options){
+	var send = this.get('send').cancel();
+	send.setOptions(options);
+	return this;
+}).defineGetter('send', function(){
+	var send = this.retrieve('send');
+	if (!send){
+		send = new Request({
+			data: this, link: 'cancel', method: this.get('method') || 'post', url: this.get('action')
+		});
+		this.store('send', send);
 	}
-
-};
+	return send;
+});
 
 Node.Element.implement({
 
