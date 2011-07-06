@@ -14,10 +14,12 @@ authors: Daniel Buchner
 inspiration:
   - Programming Motherfucker, as it is the only thing that matters
   
+provides: Database
+
 ...
 */
 
-(function(){
+define(‘Database’, [‘Class’, ‘Options’, ‘Events’, ‘Chain’, ‘Function’, ‘Object’, ‘Array’], function(Class, Options, Events, Chain, Function, Object, Array){
 
 	var errorTypes = {
 		1: 'unknown',
@@ -72,7 +74,7 @@ inspiration:
 			var range = {};
 			this.each(function(v, k){
 				range[k] = v;
-			}, this, IDBKeyRange.bound(start, end, false, false), fn.bind(bind, range));
+			}, this, IDBKeyRange.bound(start, end, false, false), Function.bind(fn, bind, range));
 			return this;
 		},
 		
@@ -102,10 +104,10 @@ inspiration:
 		return object = revived;
 	};
 	
-	[
+	Array.forEach([
 		{ type: 'IDBObjectStore', methods: IDBMethods },
 		{ type: 'IDBIndex', methods: Object.subset(IDBMethods, ['retrieve', 'each', 'getRange', 'getKeys', 'getValues']) }
-	].each(function(object){
+	], function(object){
 		var global = window[object.type];
 		global.extend = Object.extend;
 		new Type(object.type, global);
@@ -206,12 +208,12 @@ inspiration:
 		
 		setVersion: function(version, fn) {
 			this.previousVersion = this.db.version;
-			this.db.setVersion(version || this.db.version).onsuccess = (fn || function(){}).bind(this);
+			this.db.setVersion(version || this.db.version).onsuccess = Function.bind(fn || function(){}, this);
 			return this;
 		},
 		
 		create: function(name, options){
-			return(!this.db.objectStoreNames.contains(name)) ? this.db.createObjectStore(name, options || {}) : this.getObject(name);
+			return(!Array.contains(this.db.objectStoreNames, name)) ? this.db.createObjectStore(name, options || {}) : this.getObject(name);
 		},
 		
 		getObject: function(name){
@@ -230,4 +232,6 @@ inspiration:
 		
 	});
 
-})();
+return Database;
+
+});
