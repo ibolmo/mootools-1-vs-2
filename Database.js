@@ -14,8 +14,6 @@ authors: Daniel Buchner
 inspiration:
   - Programming Motherfucker, as it is the only thing that matters
   
-provides: Database
-
 ...
 */
 

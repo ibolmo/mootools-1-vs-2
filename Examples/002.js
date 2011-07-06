@@ -1,4 +1,6 @@
-var myElement = document.id('myElement');
+require([‘DOM/Node’, ‘Request’], function(Node, Request){
+
+var myElement = Node.select('myElement');
  
 var myRequest = new Request({
     url: 'getMyText.php',
@@ -14,7 +16,9 @@ var myRequest = new Request({
     }
 });
  
-document.id('myLink').addEvent('click', function(event){
+Node.select('myLink').addEvent('click', function(event){
     event.stop();
     myRequest.send('userid=' + this.get('data-userid'));
+});
+
 });

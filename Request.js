@@ -3,23 +3,19 @@
 
 name: Request
 
-description: Powerful all purpose Request Class. Uses XMLHTTPRequest.
+description: Powerful all purpose Request Class. Uses XMLHTTPRequest. Now using 2.0.
 
 license: MIT-style license.
-
-requires: [Object, Element, Chain, Events, Options, Browser]
-
-provides: Request
 
 ...
 */
 
-(function(){
+define(‘Request’, [‘typeOf’, ‘Object’, ‘DOM/Node’, ‘Chain’, ‘Events’, ‘Options’, ‘Browser’], function(typeOf, Object, Node, Chain, Events, Options, Browser){
 
 var empty = function(){},
 	progressSupport = ('onprogress' in new Browser.Request);
 
-var Request = this.Request = new Class({
+var Request = new Class({
 
 	Implements: [Chain, Events, Options],
 
@@ -66,10 +62,10 @@ var Request = this.Request = new Class({
 		if (xhr.readyState != 4 || !this.running) return;
 		this.running = false;
 		this.status = 0;
-		Function.attempt(function(){
+		Function.attempt(Function.bind(function(){
 			var status = xhr.status;
 			this.status = (status == 1223) ? 204 : status;
-		}.bind(this));
+		}, this));
 		xhr.onreadystatechange = empty;
 		if (progressSupport) xhr.onprogress = xhr.onloadstart = empty;
 		clearTimeout(this.timer);
@@ -92,7 +88,7 @@ var Request = this.Request = new Class({
 
 	processScripts: function(text){
 		if (this.options.evalResponse || (/(ecma|java)script/).test(this.getHeader('Content-type'))) return Browser.exec(text);
-		return text.stripScripts(this.options.evalScripts);
+		return String.stripScripts(text, this.options.evalScripts);
 	},
 
 	success: function(text, xml){
@@ -129,16 +125,16 @@ var Request = this.Request = new Class({
 	},
 
 	getHeader: function(name){
-		return Function.attempt(function(){
+		return Function.attempt(Function.bind(function(){
 			return this.xhr.getResponseHeader(name);
-		}.bind(this));
+		}, this));
 	},
 
 	check: function(){
 		if (!this.running) return true;
 		switch (this.options.link){
 			case 'cancel': this.cancel(); return true;
-			case 'chain': this.chain(this.caller.pass(arguments, this)); return false;
+			case 'chain': this.chain(Function.pass(this.caller, arguments, this)); return false;
 		}
 		return false;
 	},
@@ -157,7 +153,7 @@ var Request = this.Request = new Class({
 		var data = options.data, url = String(options.url), method = options.method.toLowerCase();
 
 		switch (typeOf(data)){
-			case 'element': data = document.id(data).toQueryString(); break;
+			case 'element': data = DOM.Element.toQueryString(data); break;
 			case 'object': case 'hash': data = Object.toQueryString(data);
 		}
 
@@ -166,13 +162,13 @@ var Request = this.Request = new Class({
 			data = (data) ? format + '&' + data : format;
 		}
 
-		if (this.options.emulation && !['get', 'post'].contains(method)){
+		if (this.options.emulation && !Array.contains(['get', 'post'], method)){
 			var _method = '_method=' + method;
 			data = (data) ? _method + '&' + data : _method;
 			method = 'post';
 		}
 
-		if (this.options.urlEncoded && ['post', 'put'].contains(method)){
+		if (this.options.urlEncoded && Array.contains(['post', 'put'], method)){
 			var encoding = (this.options.encoding) ? '; charset=' + this.options.encoding : '';
 			this.headers['Content-type'] = 'application/x-www-form-urlencoded' + encoding;
 		}
@@ -183,17 +179,17 @@ var Request = this.Request = new Class({
 		if (trimPosition > -1 && (trimPosition = url.indexOf('#')) > -1) url = url.substr(0, trimPosition);
 
 		if (this.options.noCache)
-			url += (url.contains('?') ? '&' : '?') + String.uniqueID();
+			url += (String.contains(url, '?') ? '&' : '?') + String.uniqueID();
 
 		if (data && method == 'get'){
-			url += (url.contains('?') ? '&' : '?') + data;
+			url += (String.contains(url, '?') ? '&' : '?') + data;
 			data = null;
 		}
 
 		var xhr = this.xhr;
 		if (progressSupport){
-			xhr.onloadstart = this.loadstart.bind(this);
-			xhr.onprogress = this.progress.bind(this);
+			xhr.onloadstart = Function.bind(this.loadstart, this);
+			xhr.onprogress = Function.bind(this.progress, this);
 		}
 
 		xhr.open(method.toUpperCase(), url, this.options.async, this.options.user, this.options.password);
@@ -201,7 +197,7 @@ var Request = this.Request = new Class({
 		
 		xhr.onreadystatechange = this.onStateChange.bind(this);
 
-		Object.each(this.headers, function(value, key){
+		Object.forEach(this.headers, function(value, key){
 			try {
 				xhr.setRequestHeader(key, value);
 			} catch (e){
@@ -212,7 +208,7 @@ var Request = this.Request = new Class({
 		this.fireEvent('request');
 		xhr.send(data);
 		if (!this.options.async) this.onStateChange();
-		if (this.options.timeout) this.timer = this.timeout.delay(this.options.timeout, this);
+		if (this.options.timeout) this.timer = setTimeout(this.timeout, this.options.timeout, this);
 		return this;
 	},
 
@@ -232,7 +228,7 @@ var Request = this.Request = new Class({
 });
 
 var methods = {};
-['get', 'post', 'put', 'delete', 'GET', 'POST', 'PUT', 'DELETE'].each(function(method){
+Array.forEach(['get', 'post', 'put', 'delete', 'GET', 'POST', 'PUT', 'DELETE'], function(method){
 	methods[method] = function(data){
 		var object = {
 			method: method
@@ -244,7 +240,7 @@ var methods = {};
 
 Request.implement(methods);
 
-Element.Properties.send = {
+Node.Element.Properties.send = {
 
 	set: function(options){
 		var send = this.get('send').cancel();
@@ -265,7 +261,7 @@ Element.Properties.send = {
 
 };
 
-Element.implement({
+Node.Element.implement({
 
 	send: function(url){
 		var sender = this.get('send');
@@ -275,4 +271,6 @@ Element.implement({
 
 });
 
-})();
+return Request;
+
+});

@@ -7,14 +7,11 @@ authors:
 
 license:
   - MIT-style license
-
-requires:
-  core/1.2.1:   '*'
-
-provides:
-  - ScrollSpy
 ...
 */
+
+define(‘ScrollSpy’, [‘Class’, ‘Options’ ‘Events’, ‘DOM/Node’], function(Class, Options, Events, Node){
+
 var ScrollSpy = new Class({
 
 	/* implements */
@@ -37,7 +34,7 @@ var ScrollSpy = new Class({
 	initialize: function(options) {
 		/* set options */
 		this.setOptions(options);
-		this.container = document.id(this.options.container);
+		this.container = Node.select(this.options.container);
 		this.enters = this.leaves = 0;
 		this.inside = false;
 		
@@ -88,4 +85,8 @@ var ScrollSpy = new Class({
 	addListener: function() {
 		this.start();
 	}
+});
+
+return ScrollSpy;
+
 });
