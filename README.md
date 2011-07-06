@@ -6,4 +6,4 @@ Branches `1.3.x` and `2.y.x` are what'd you expect them to be. Always checkout a
 
 ### Demonstrations
 
-The first demonstration is a comparison between 1.3.x and 2.y.x code. 
+[The first demonstration is a comparison between 1.3.x and 2.y.x code.](https://github.com/ibolmo/mootools-1-vs-2/compare/1.3.x...2.y.x)
