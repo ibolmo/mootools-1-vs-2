@@ -110,7 +110,7 @@ define(‘Database’, [‘Class’, ‘Options’, ‘Events’, ‘Chain’, �
 	], function(object){
 		var global = window[object.type];
 		global.extend = Object.extend;
-		new Type(object.type, global);
+		//new Type(object.type, global);
 		global.implement(new Chain).implement(Object.map(object.methods, function(method){
 			return function(){
 				return method.apply(((this.objectStore || this).inactive) ? revive(this) : this, arguments);
