@@ -1,3 +1,5 @@
+require([‘Request’], function(Request){
+
 var myRequest = new Request({
     url: 'image.jpg',
     onProgress: function(event, xhr){
@@ -9,3 +11,4 @@ var myRequest = new Request({
  
 myRequest.send();
 
+});
