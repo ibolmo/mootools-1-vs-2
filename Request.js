@@ -10,7 +10,7 @@ license: MIT-style license.
 ...
 */
 
-define(‘Request’, [‘typeOf’, ‘Object’, ‘DOM/Node’, ‘Chain’, ‘Events’, ‘Options’, ‘Browser’], function(typeOf, Object, Node, Chain, Events, Options, Browser){
+define('Request', ['typeOf', 'Object', 'DOM/Node', 'Chain', 'Events', 'Options', 'Browser'], function(typeOf, Object, Node, Chain, Events, Options, Browser){
 
 var empty = function(){},
 	progressSupport = ('onprogress' in new Browser.Request);

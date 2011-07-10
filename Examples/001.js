@@ -1,4 +1,4 @@
-require([‘Request’], function(Request){
+require(['Request'], function(Request){
 
 var myRequest = new Request({
     url: 'image.jpg',

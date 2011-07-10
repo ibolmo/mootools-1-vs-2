@@ -10,7 +10,7 @@ license:
 ...
 */
 
-define(‘ScrollSpy’, [‘Class’, ‘Options’ ‘Events’, ‘DOM/Node’], function(Class, Options, Events, Node){
+define('ScrollSpy', ['Class', 'Options', 'Events', 'DOM/Node'], function(Class, Options, Events, Node){
 
 var ScrollSpy = new Class({
 

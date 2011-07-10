@@ -19,7 +19,7 @@ provides: Database
 ...
 */
 
-define(‘Database’, [‘Class’, ‘Options’, ‘Events’, ‘Chain’, ‘Function’, ‘Object’, ‘Array’], function(Class, Options, Events, Chain, Function, Object, Array){
+define('Database', ['Class', 'Options', 'Events', 'Chain', 'Function', 'Object', 'Array'], function(Class, Options, Events, Chain, Function, Object, Array){
 
 	var errorTypes = {
 		1: 'unknown',
