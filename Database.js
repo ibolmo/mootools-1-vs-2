@@ -21,6 +21,9 @@ provides: Database
 
 define(‘Database’, [‘Class’, ‘Options’, ‘Events’, ‘Chain’, ‘Function’, ‘Object’, ‘Array’], function(Class, Options, Events, Chain, Function, Object, Array){
 
+	Function.install();
+	Array.install();
+
 	var errorTypes = {
 		1: 'unknown',
 		2: 'nonTransient',
@@ -74,7 +77,7 @@ define(‘Database’, [‘Class’, ‘Options’, ‘Events’, ‘Chain’, �
 			var range = {};
 			this.each(function(v, k){
 				range[k] = v;
-			}, this, IDBKeyRange.bound(start, end, false, false), Function.bind(fn, bind, range));
+			}, this, IDBKeyRange.bound(start, end, false, false), fn.bind(bind, range));
 			return this;
 		},
 		
@@ -104,10 +107,10 @@ define(‘Database’, [‘Class’, ‘Options’, ‘Events’, ‘Chain’, �
 		return object = revived;
 	};
 	
-	Array.forEach([
+	[
 		{ type: 'IDBObjectStore', methods: IDBMethods },
 		{ type: 'IDBIndex', methods: Object.subset(IDBMethods, ['retrieve', 'each', 'getRange', 'getKeys', 'getValues']) }
-	], function(object){
+	].each(function(object){
 		var global = window[object.type];
 		global.extend = Object.extend;
 		//new Type(object.type, global);
@@ -208,12 +211,12 @@ define(‘Database’, [‘Class’, ‘Options’, ‘Events’, ‘Chain’, �
 		
 		setVersion: function(version, fn) {
 			this.previousVersion = this.db.version;
-			this.db.setVersion(version || this.db.version).onsuccess = Function.bind(fn || function(){}, this);
+			this.db.setVersion(version || this.db.version).onsuccess = (fn || function(){}).bind(this);
 			return this;
 		},
 		
 		create: function(name, options){
-			return(!Array.contains(this.db.objectStoreNames, name)) ? this.db.createObjectStore(name, options || {}) : this.getObject(name);
+			return(!this.db.objectStoreNames.contains(name)) ? this.db.createObjectStore(name, options || {}) : this.getObject(name);
 		},
 		
 		getObject: function(name){
