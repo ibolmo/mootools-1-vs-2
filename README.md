@@ -8,9 +8,9 @@ Branch `2.y.x-installed` is code that uses the `Host.install` method. This is us
 
 ### Demonstrations
 
-[Compare 1.3.x and 2.y.x code.](https://github.com/ibolmo/mootools-1-vs-2/compare/1.3.x...2.y.x)
-[Compare 1.3.x and 2.y.x-installed code.](https://github.com/ibolmo/mootools-1-vs-2/compare/1.3.x...2.y.x-installed)
-[Compare 2.y.x and 2.y.x-installed code.](https://github.com/ibolmo/mootools-1-vs-2/compare/2.y.x...2.y.x-installed)
+* [Compare 1.3.x and 2.y.x code.](https://github.com/ibolmo/mootools-1-vs-2/compare/1.3.x...2.y.x)
+* [Compare 1.3.x and 2.y.x-installed code.](https://github.com/ibolmo/mootools-1-vs-2/compare/1.3.x...2.y.x-installed)
+* [Compare 2.y.x and 2.y.x-installed code.](https://github.com/ibolmo/mootools-1-vs-2/compare/2.y.x...2.y.x-installed)
 
 ### Contribute
 These examples have been selected or contributed by others. You can send your own code so that you can see the exact difference between the `1.3.x` and `2.y.x` code.
